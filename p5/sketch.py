@@ -39,7 +39,7 @@ class Vehicle:
     self.maxspeed = 4
     self.maxforce = 0.2
     self.health = 0
-    self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 100), random.uniform(0, 100)]
+    self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(100, 200), random.uniform(100, 200)]
 
   def update(self):
     """
@@ -302,19 +302,19 @@ poison = []
 debug = False
 
 # Create the vehicles
-for i in range(20):
+for i in range(40):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   vehicles.append(Vehicle(x, y))
 
 # Create the food particles
-for i in range(30):
+for i in range(40):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   food.append(pygame.math.Vector2(x, y))
 
 # Create the poison particles
-for i in range(30):
+for i in range(40):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   poison.append(pygame.math.Vector2(x, y))
