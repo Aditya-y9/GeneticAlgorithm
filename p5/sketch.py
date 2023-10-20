@@ -280,17 +280,19 @@ def drawVehicles():
       food.append(pygame.math.Vector2(x, y))
       vehicles.remove(v)
 
-
-def averageHealth():
+aHealth = []
+def averageHealth(aHealth):
   # Calculate the average health of the vehicles
   total = 0
   for v in vehicles:
     total += v.health
-  return total / len(vehicles)
+    average_Health = total / len(vehicles)
+    aHealth.append(average_Health)
+  return average_Health
 
 def showText():
   # Display the text on the screen
-  text = "Average Health: " + str(averageHealth())
+  text = "Average Health: " + str(averageHealth(aHealth))
   pygame.display.set_caption(text)
 
 
@@ -354,7 +356,24 @@ while running:
 
   # Set the frame rate
   clock.tick(30)
+  # importing the required module 
+import matplotlib.pyplot as plt 
 
+import matplotlib.pyplot as plt
+
+# Define the x-axis values
+x = range(len(aHealth))
+
+# Plot the graph
+plt.plot(x, aHealth)
+
+# Add labels and title
+plt.xlabel('Generation')
+plt.ylabel('Average Health')
+plt.title('Average Health per Generation')
+
+# Show the graph
+plt.show()
 # Quit Pygame
 pygame.quit()
 def nextGeneration():
