@@ -9,23 +9,15 @@ import math
 pygame.init()
 
 # Set the screen size
-screen_width = 1080
-screen_height = 720
-screen = pygame.display.set_mode((screen_width, screen_height))
+screen_width = 540
+screen_height = 540
+# screen = pygame.display.set_mode((screen_width, screen_height))
 
 # Set the clock
 clock = pygame.time.Clock()
 
-# Define the Vehicle class
-import pygame
-import random
-import math
-
-# Initialize the pygame library
-pygame.init()
-
 # Set the screen size
-screen = pygame.display.set_mode((640, 360))
+screen = pygame.display.set_mode((screen_height, screen_width))
 
 # Set the debug flag
 debug = False
@@ -46,7 +38,7 @@ class Vehicle:
     self.r = 6
     self.maxspeed = 4
     self.maxforce = 0.2
-    self.health = 1
+    self.health = 0
     self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 100), random.uniform(0, 100)]
 
   def update(self):
@@ -54,7 +46,7 @@ class Vehicle:
     Updates the vehicle's health, velocity, position, and acceleration.
     """
     # Update the health, velocity, position, and acceleration of the vehicle
-    self.health -= 0.005
+    # self.health -= 0.003
     self.velocity += self.acceleration
     # Limit the velocity to the maximum speed
     if self.velocity.length() > self.maxspeed:
@@ -100,7 +92,14 @@ class Vehicle:
     Vehicle: A new instance of the Vehicle class with the same position as the original vehicle.
     """
     # Clone the vehicle with a small probability
-    if random.random() < 0.005:
+    
+    if 0.1 < random.random() < 0.01 and self.health > 0.95:
+      return Vehicle(self.position.x, self.position.y)
+    elif 0.01 < random.random() < 0.001 and self.health > 0.9:
+      return Vehicle(self.position.x, self.position.y)
+    elif random.random() < 0.001 and self.health > 0.75:
+      return Vehicle(self.position.x, self.position.y)
+    elif random.random() < 0.0001 and self.health > 0.5:
       return Vehicle(self.position.x, self.position.y)
 
   def eat(self, lst, nutrition, perception):
@@ -163,7 +162,7 @@ class Vehicle:
     bool: True if the vehicle is dead, False otherwise.
     """
     # Check if the vehicle is dead
-    return self.health < 0
+    return self.health < -1
 
   def display(self):
     """
@@ -248,7 +247,7 @@ def addFood():
 
 def addPoison():
   # Add a poison particle with a small probability
-  if random.random() < 0.01:
+  if random.random() < 0.1:
     x = random.randint(0, screen_width)
     y = random.randint(0, screen_height)
     poison.append(pygame.math.Vector2(x, y))
@@ -281,6 +280,21 @@ def drawVehicles():
       food.append(pygame.math.Vector2(x, y))
       vehicles.remove(v)
 
+
+def averageHealth():
+  # Calculate the average health of the vehicles
+  total = 0
+  for v in vehicles:
+    total += v.health
+  return total / len(vehicles)
+
+def showText():
+  # Display the text on the screen
+  text = "Average Health: " + str(averageHealth())
+  pygame.display.set_caption(text)
+
+
+
 # Initialize the variables
 vehicles = []
 food = []
@@ -288,19 +302,19 @@ poison = []
 debug = False
 
 # Create the vehicles
-for i in range(100):
+for i in range(20):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   vehicles.append(Vehicle(x, y))
 
 # Create the food particles
-for i in range(40):
+for i in range(30):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   food.append(pygame.math.Vector2(x, y))
 
 # Create the poison particles
-for i in range(50):
+for i in range(30):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   poison.append(pygame.math.Vector2(x, y))
@@ -329,6 +343,8 @@ while running:
   # Draw the food and poison particles
   drawFood()
   drawPoison()
+  showText()
+
 
   # Draw the vehicles
   drawVehicles()
@@ -337,7 +353,67 @@ while running:
   pygame.display.flip()
 
   # Set the frame rate
-  clock.tick(60)
+  clock.tick(30)
 
 # Quit Pygame
 pygame.quit()
+def nextGeneration():
+  """
+  Creates the next generation of vehicles.
+  """
+  global vehicles
+
+  # Create a new list of vehicles for the next generation
+  newVehicles = []
+
+  # Calculate the total health of all vehicles in the current generation
+  totalHealth = 0
+  for v in vehicles:
+    totalHealth += v.health
+
+  # For each vehicle in the current generation
+  for i in range(len(vehicles)):
+    # Calculate the fitness of the vehicle as its health divided by the total health of all vehicles
+    fitness = vehicles[i].health / totalHealth
+
+    # Select two parent vehicles based on their fitness
+    parentA = pickParent(vehicles, fitness)
+    parentB = pickParent(vehicles, fitness)
+
+    # Create a new vehicle by crossing over the DNA of the two parent vehicles
+    child = parentA.crossover(parentB)
+
+    # Mutate the DNA of the new vehicle
+    child.mutate()
+
+    # Add the new vehicle to the list of vehicles for the next generation
+    newVehicles.append(child)
+
+  # Replace the current generation with the list of vehicles for the next generation
+  vehicles = newVehicles
+
+def pickParent(vehicles, fitness):
+  """
+  Picks a parent vehicle based on its fitness.
+
+  Args:
+  vehicles (list): The list of vehicles to choose from.
+  fitness (float): The fitness of the vehicles.
+
+  Returns:
+  Vehicle: The parent vehicle.
+  """
+  # Pick a random number between 0 and 1
+  r = random.uniform(0, 1)
+
+  # Loop through the vehicles and calculate the cumulative fitness
+  cumulativeFitness = 0
+  for v in vehicles:
+    cumulativeFitness += v.health / fitness
+
+    # If the cumulative fitness is greater than the random number, return the vehicle
+    if cumulativeFitness > r:
+      return v
+
+  # If no vehicle was selected, return the last vehicle in the list
+  return vehicles[-1]
