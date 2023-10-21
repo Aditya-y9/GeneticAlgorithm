@@ -6,6 +6,22 @@ The simulation is displayed on a screen with a width of 1080 pixels and a height
 The simulation includes vehicles, food particles, and poison particles. 
 The vehicles are controlled by a set of rules that determine their behavior, such as seeking out food particles and avoiding poison particles.
 
+
+# Genetic Algorithm
+DNA List contains 4 genes for each vehicle
+1. Food Attractions
+2. Poison Repulsions
+3. Food Perception
+4. Poison Perception
+
+It works by creating a new population of vehicles based on the fitness of the previous population.
+The fitness of each vehicle is determined by the amount of food it eats and the amount of poison it avoids.
+The vehicles with the highest fitness are more likely to be selected for reproduction.
+The vehicles with the lowest fitness are less likely to be selected for reproduction.
+The vehicles with the highest fitness are more likely to pass on their genes to the next generation.
+The vehicles with the lowest fitness are less likely to pass on their genes to the next generation.
+The vehicles with the highest fitness are more likely to have their genes mutated.
+
 ## Usage
 
 To run the simulation, simply run the `main.py` file using Python. The simulation will start and run until the user quits the simulation.

@@ -39,7 +39,7 @@ class Vehicle:
     self.maxspeed = 4
     self.maxforce = 0.2
     self.health = 0
-    self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(100, 200), random.uniform(100, 200)]
+    self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
 
   def update(self):
     """
@@ -115,19 +115,32 @@ class Vehicle:
     Vector2: The steering force required to reach the closest particle.
     """
     # Find the closest good or bad particle and eat it if it is within range
+
+    # set to a very large number infinity
     record = float("inf")
+
+    # closest to none for now
     closest = None
+
+    # loop through the list of particles backwards to remove them
     for i in range(len(lst)-1, -1, -1):
+
+      # distance to particle
       d = self.position.distance_to(lst[i])
 
+      # if the distance is less than the record and less than the perception
       if d < self.maxspeed:
         lst.pop(i)
         self.health += nutrition
       else:
+        # perception for particular particle according to DNA and evolution 
         if d < record and d < perception:
           record = d
           closest = lst[i]
 
+
+    # if there is a closest particle
+    # seek it
     if closest is not None:
       return self.seek(closest)
 
