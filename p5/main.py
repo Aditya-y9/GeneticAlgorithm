@@ -43,24 +43,49 @@ class Vehicle:
     self.maxforce = 0.2
     self.health = 0
     if dna != None:
-      aHealth.append(1)
+      # aHealth.append(1)
       print("T")
       generation = generation + 1
       print(generation)
       show = True
-      while show:
-        showtext(screen,"Generation: "+str(generation),(screen_width/2-180,screen_height/2),50)
-        pygame.display.update()
-        time.sleep(2)
-        show = False
+      # while show:
+      #   showtext(screen,"Generation: "+str(generation),(screen_width/2-180,screen_height/2),50)
+      #   pygame.display.update()
+      #   time.sleep(2)
+      #   show = False
       
       # randomized DNA closely related to the parent to mtuation
       ro = random.uniform(-0.1, 0.1)
-      if ro >= 0:
-        self.dna = [dna[0] - random.uniform(-0.05, 0.05), dna[1] - random.uniform(-0.05, 0.05), dna[2] + random.uniform(-5, 5), dna[3] + random.uniform(-5, 5)]
+      if -0.1 < ro < -0.075:
+        self.dna = [dna[0], dna[1], dna[2] + random.uniform(-5,5), dna[3] + random.uniform(-5, 5)]
+      elif -0.075 < ro < -0.05:
+        self.dna = [dna[0], dna[1] - random.uniform(-0.1, 0.1), dna[2], dna[3] - random.uniform(-5, 5)]
+      elif -0.05 < ro < -0.025:
+        self.dna = [dna[0], dna[1] - random.uniform(-0.1, 0.1), dna[2] - random.uniform(-5, 5), dna[3]]
+      elif -0.025 < ro < 0:
+        self.dna = [dna[0] + random.uniform(-0.1,0.1), dna[1], dna[2] - random.uniform(-5, 5), dna[3] - random.uniform(-5, 5)]
+      elif 0 < ro < 0.025:
+        self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2], dna[3] + random.uniform(-5, 5)]
+      elif 0.025 < ro < 0.05:
+        self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2] - random.uniform(-5, 5), dna[3]] 
+      elif 0.05 < ro < 0.075:
+        self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1] + random.uniform(-0.1, 0.1), dna[2], dna[3]]
       else:
-        self.dna = [dna[0] + random.uniform(-0.05, 0.05), dna[1] + random.uniform(-0.05, 0.05), dna[2] - random.uniform(-5, 5), dna[3] - random.uniform(-5, 5)]
-    self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
+        self.dna = [dna[0], dna[1] + random.uniform(-0.1, 0.1), dna[2], dna[3]]
+    else:
+      self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
+
+      # if -0.1 < ro < -0.05:
+      #   self.dna = [dna[0], dna[1], dna[2], dna[3] + random.uniform(-5, 5)]
+      # elif -0.05 < ro < 0:
+      #   self.dna = [dna[0], dna[1] - random.uniform(-0.1, 0.1), dna[2], dna[3]]
+      # elif 0 < ro < 0.05:
+      #   self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2], dna[3]]
+      # elif 0.05 < ro < 0.1:
+      #   self.dna = [dna[0], dna[1], dna[2] + random.uniform(-5, 5), dna[3]]
+    # else:
+    #   self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
+    
 
   def update(self):
     """
@@ -113,15 +138,24 @@ class Vehicle:
     Vehicle: A new instance of the Vehicle class with the same position as the original vehicle.
     """
     # Clone the vehicle with a small probability
-    
-    if 0.1 < random.random() < 0.01 and self.health > 0.95:
+    if random.random() < 0.005 and self.health >= 1.6:
       return Vehicle(self.position.x, self.position.y,self.dna)
-    elif 0.01 < random.random() < 0.01 and self.health > 0.9:
+    elif 0.1 < random.random() <= 0.004 and self.health >= 1.5:
       return Vehicle(self.position.x, self.position.y,self.dna)
-    elif random.random() < 0.001 and self.health > 0.75:
+    elif 0.01 < random.random() < 0.003 and self.health >= 1.4:
       return Vehicle(self.position.x, self.position.y,self.dna)
-    elif random.random() < 0.0001 and self.health > 0.5:
+    elif 0.005 < random.random() < 0.002 and self.health >= 1.3:
       return Vehicle(self.position.x, self.position.y,self.dna)
+    elif random.random() < 0.001 and self.health >= 1.2:
+      return Vehicle(self.position.x, self.position.y,self.dna)
+    elif random.random() < 0.0001 and self.health >= 1.1:
+      return Vehicle(self.position.x, self.position.y,self.dna)
+    # elif 0.005 < random.random() < 0.003 and self.health > 1:
+    #   return Vehicle(self.position.x, self.position.y,self.dna)
+    # elif random.random() < 0.001 and self.health > 0.75:
+    #   return Vehicle(self.position.x, self.position.y,self.dna)
+    # elif random.random() < 0.0001 and self.health > 0.5:
+    #   return Vehicle(self.position.x, self.position.y,self.dna)
 
   def eat(self, lst, nutrition, perception):
     """
@@ -271,14 +305,14 @@ def drawVector(position, vector, color):
 
 def addFood():
   # Add a food particle with a small probability
-  if random.random() < 0.1:
+  if random.random() < 0.3:
     x = random.randint(0, screen_width)
     y = random.randint(0, screen_height)
     food.append(pygame.math.Vector2(x, y))
 
 def addPoison():
   # Add a poison particle with a small probability
-  if random.random() < 0.1:
+  if random.random() < 0.3:
     x = random.randint(0, screen_width)
     y = random.randint(0, screen_height)
     poison.append(pygame.math.Vector2(x, y))
@@ -318,6 +352,7 @@ def averageHealth(aHealth):
   for v in vehicles:
     total += v.health
     average_Health = total / len(vehicles)
+    # print(v.health)
     aHealth.append(average_Health)
   return average_Health
 
@@ -358,13 +393,13 @@ for i in range(40):
   vehicles.append(Vehicle(x, y))
 
 # Create the food particles
-for i in range(40):
+for i in range(100):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   food.append(pygame.math.Vector2(x, y))
 
 # Create the poison particles
-for i in range(40):
+for i in range(100):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   poison.append(pygame.math.Vector2(x, y))
