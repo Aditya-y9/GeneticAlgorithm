@@ -1,31 +1,16 @@
 # Vehicle Simulation
-![CoC Logo](https://github.com/Aditya-y9/GeneticAlgorithm/blob/69d20ab1ef938fe5daeb884504cc5e6c832786fa/coc_logo.jpg)
-### <strong style="align-text:center">
-Under Guidance of College Coding Club CoC.
-<strong>
 
 This is a Python simulation of vehicles that eat food and avoid poison particles. 
 The simulation is built using the Pygame library, which is a set of Python modules designed for writing video games. 
 The simulation is displayed on a screen with a width of 1080 pixels and a height of 720 pixels. 
 
-<p><center>
-    <img src="ui.png"/>
-</center>
-</p>
-### <strong style="font-family:courier new">
-Basic interface
-<strong>
+
+
+
 The simulation includes vehicles, food particles, and poison particles. 
 The vehicles are controlled by a set of rules that determine their behavior, such as seeking out food particles and avoiding poison particles.
 
 
-<p><center>
-    <img src="debug.png"/>
-</center>
-</p>
-### <strong style="font-family:copperplate gothic">
-Vehicle with debug mode on
-<strong>
 
 
 # Genetic Algorithm
@@ -41,23 +26,13 @@ It works by creating a new population of vehicles based on the fitness of the pr
 The fitness of each vehicle is determined by the amount of food it eats and the amount of poison it avoids.
 The vehicles with the highest fitness are more likely to be selected for reproduction.
 
-<p><center>
-    <img src="generations.png"/>
-</center>
-</p>
-### <strong style="font-style:italic">
-Generations of vehicles
-<strong>
+
 The vehicles with the lowest fitness are less likely to be selected for reproduction.
 The vehicles with the highest fitness are more likely to pass on their genes to the next generation.
 The vehicles with the lowest fitness are less likely to pass on their genes to the next generation.
 The vehicles with the highest fitness are more likely to have their genes mutated.
 
-<p><center>
-    <img src="graph.png"/>
-    </center>
-</p>
-### <strong style="font-family:courier new">
+
 Graph showing average health of vehicles over generations
 Graph made using Matplotlib
 <strong>
