@@ -4,7 +4,8 @@
 import pygame
 import random
 import math
-
+import matplotlib.pyplot as plt 
+import time
 # Initialize Pygame
 pygame.init()
 
@@ -18,12 +19,14 @@ clock = pygame.time.Clock()
 
 # Set the screen size
 screen = pygame.display.set_mode((screen_height, screen_width))
-
+pygame.display.set_icon(pygame.image.load(r'C:\Users\MSHOME\Desktop\Newfolder\GeneticAlgorithm\p5\coc_logo.jpg'))
 # Set the debug flag
 debug = False
-
+generation = 0
 class Vehicle:
-  def __init__(self, x, y):
+
+  def __init__(self, x, y,dna=None):
+    global generation
     """
     Initializes a new instance of the Vehicle class.
 
@@ -39,7 +42,50 @@ class Vehicle:
     self.maxspeed = 4
     self.maxforce = 0.2
     self.health = 0
-    self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
+    if dna != None:
+      # aHealth.append(1)
+      print("T")
+      generation = generation + 1
+      print(generation)
+      show = True
+      # while show:
+      #   showtext(screen,"Generation: "+str(generation),(screen_width/2-180,screen_height/2),50)
+      #   pygame.display.update()
+      #   time.sleep(2)
+      #   show = False
+      
+      # randomized DNA closely related to the parent to mtuation
+      ro = random.uniform(-0.1, 0.1)
+      if -0.1 < ro < -0.075:
+        self.dna = [dna[0], dna[1], dna[2] + random.uniform(-5,5), dna[3] + random.uniform(-5, 5)]
+      elif -0.075 < ro < -0.05:
+        self.dna = [dna[0], dna[1] - random.uniform(-0.1, 0.1), dna[2], dna[3] - random.uniform(-5, 5)]
+      elif -0.05 < ro < -0.025:
+        self.dna = [dna[0], dna[1] - random.uniform(-0.1, 0.1), dna[2] - random.uniform(-5, 5), dna[3]]
+      elif -0.025 < ro < 0:
+        self.dna = [dna[0] + random.uniform(-0.1,0.1), dna[1], dna[2] - random.uniform(-5, 5), dna[3] - random.uniform(-5, 5)]
+      elif 0 < ro < 0.025:
+        self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2], dna[3] + random.uniform(-5, 5)]
+      elif 0.025 < ro < 0.05:
+        self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2] - random.uniform(-5, 5), dna[3]] 
+      elif 0.05 < ro < 0.075:
+        self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1] + random.uniform(-0.1, 0.1), dna[2], dna[3]]
+      else:
+        self.dna = [dna[0], dna[1] + random.uniform(-0.1, 0.1), dna[2], dna[3]]
+    else:
+      self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
+
+      # if -0.1 < ro < -0.05:
+      #   self.dna = [dna[0], dna[1], dna[2], dna[3] + random.uniform(-5, 5)]
+      # elif -0.05 < ro < 0:
+      #   self.dna = [dna[0], dna[1] - random.uniform(-0.1, 0.1), dna[2], dna[3]]
+      # elif 0 < ro < 0.05:
+      #   self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2], dna[3]]
+      # elif 0.05 < ro < 0.1:
+      #   self.dna = [dna[0], dna[1], dna[2] + random.uniform(-5, 5), dna[3]]
+    # else:
+    #   self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
+    
 
   def update(self):
     """
@@ -92,15 +138,24 @@ class Vehicle:
     Vehicle: A new instance of the Vehicle class with the same position as the original vehicle.
     """
     # Clone the vehicle with a small probability
-    
-    if 0.1 < random.random() < 0.01 and self.health > 0.95:
-      return Vehicle(self.position.x, self.position.y)
-    elif 0.01 < random.random() < 0.001 and self.health > 0.9:
-      return Vehicle(self.position.x, self.position.y)
-    elif random.random() < 0.001 and self.health > 0.75:
-      return Vehicle(self.position.x, self.position.y)
-    elif random.random() < 0.0001 and self.health > 0.5:
-      return Vehicle(self.position.x, self.position.y)
+    if random.random() < 0.005 and self.health >= 1.6:
+      return Vehicle(self.position.x, self.position.y,self.dna)
+    elif 0.1 < random.random() <= 0.004 and self.health >= 1.5:
+      return Vehicle(self.position.x, self.position.y,self.dna)
+    elif 0.01 < random.random() < 0.003 and self.health >= 1.4:
+      return Vehicle(self.position.x, self.position.y,self.dna)
+    elif 0.005 < random.random() < 0.002 and self.health >= 1.3:
+      return Vehicle(self.position.x, self.position.y,self.dna)
+    elif random.random() < 0.001 and self.health >= 1.2:
+      return Vehicle(self.position.x, self.position.y,self.dna)
+    elif random.random() < 0.0001 and self.health >= 1.1:
+      return Vehicle(self.position.x, self.position.y,self.dna)
+    # elif 0.005 < random.random() < 0.003 and self.health > 1:
+    #   return Vehicle(self.position.x, self.position.y,self.dna)
+    # elif random.random() < 0.001 and self.health > 0.75:
+    #   return Vehicle(self.position.x, self.position.y,self.dna)
+    # elif random.random() < 0.0001 and self.health > 0.5:
+    #   return Vehicle(self.position.x, self.position.y,self.dna)
 
   def eat(self, lst, nutrition, perception):
     """
@@ -191,49 +246,46 @@ class Vehicle:
       pygame.draw.circle(screen, (255, 255, 0), (int(self.position.x), int(self.position.y)), self.r)
 
     # Draw the vehicle's debug information if the debug flag is set
-    if debug:
-      self.drawDebug(angle)
+  # def drawDebug(self, angle):
+  #   """
+  #   Draws the vehicle's debug information.
 
-  def drawDebug(self, angle):
-    """
-    Draws the vehicle's debug information.
+  #   Args:
+  #   angle (float): The angle of the vehicle's velocity vector.
+  #   """
+  #   # Set the scale of the debug vectors
+  #   scale = 25
 
-    Args:
-    angle (float): The angle of the vehicle's velocity vector.
-    """
-    # Set the scale of the debug vectors
-    scale = 25
+  #   # Draw the velocity vector
+  #   vel = self.velocity.copy()
+  #   vel.normalize()
+  #   vel *= scale
+  #   drawVector(self.position, vel, (0, 255, 0))
 
-    # Draw the velocity vector
-    vel = self.velocity.copy()
-    vel.normalize()
-    vel *= scale
-    drawVector(self.position, vel, (0, 255, 0))
+  #   # Draw the acceleration vector
+  #   acc = self.acceleration.copy()
+  #   acc.normalize()
+  #   acc *= scale
+  #   drawVector(self.position, acc, (0, 0, 255))
 
-    # Draw the acceleration vector
-    acc = self.acceleration.copy()
-    acc.normalize()
-    acc *= scale
-    drawVector(self.position, acc, (0, 0, 255))
+  #   # Draw the desired velocity vector
+  #   desired = self.velocity.copy()
+  #   desired.normalize()
+  #   desired *= scale * 2
+  #   drawVector(self.position, desired, (255, 0, 0))
 
-    # Draw the desired velocity vector
-    desired = self.velocity.copy()
-    desired.normalize()
-    desired *= scale * 2
-    drawVector(self.position, desired, (255, 0, 0))
+  #   # Draw the heading vector
+  #   heading = pygame.math.Vector2(0, -1)
+  #   heading.rotate_ip(angle)
+  #   heading *= scale
+  #   drawVector(self.position, heading, (0, 255, 255))
 
-    # Draw the heading vector
-    heading = pygame.math.Vector2(0, -1)
-    heading.rotate_ip(angle)
-    heading *= scale
-    drawVector(self.position, heading, (0, 255, 255))
+  #   # Draw the perception radius
+  #   pygame.draw.circle(screen, (255, 255, 0), (int(self.position.x), int(self.position.y)), int(self.dna[2]))
 
-    # Draw the perception radius
-    pygame.draw.circle(screen, (255, 255, 0), (int(self.position.x), int(self.position.y)), int(self.dna[2]))
-
-    # Draw the food and poison perception radius
-    pygame.draw.circle(screen, (0, 255, 0), (int(self.position.x), int(self.position.y)), int(self.dna[2] * self.dna[0]))
-    pygame.draw.circle(screen, (255, 0, 0), (int(self.position.x), int(self.position.y)), int(self.dna[3] * self.dna[1]))
+  #   # Draw the food and poison perception radius
+  #   pygame.draw.circle(screen, (0, 255, 0), (int(self.position.x), int(self.position.y)), int(self.dna[2] * self.dna[0]))
+  #   pygame.draw.circle(screen, (255, 0, 0), (int(self.position.x), int(self.position.y)), int(self.dna[3] * self.dna[1]))
 
 def drawVector(position, vector, color):
   """
@@ -253,14 +305,14 @@ def drawVector(position, vector, color):
 
 def addFood():
   # Add a food particle with a small probability
-  if random.random() < 0.1:
+  if random.random() < 0.4:
     x = random.randint(0, screen_width)
     y = random.randint(0, screen_height)
     food.append(pygame.math.Vector2(x, y))
 
 def addPoison():
   # Add a poison particle with a small probability
-  if random.random() < 0.1:
+  if random.random() < 0.4:
     x = random.randint(0, screen_width)
     y = random.randint(0, screen_height)
     poison.append(pygame.math.Vector2(x, y))
@@ -300,13 +352,31 @@ def averageHealth(aHealth):
   for v in vehicles:
     total += v.health
     average_Health = total / len(vehicles)
+    # print(v.health)
     aHealth.append(average_Health)
   return average_Health
 
-def showText():
+def appearText():
   # Display the text on the screen
-  text = "Average Health: " + str(averageHealth(aHealth))
+  text = "Average Health: " + str(100*averageHealth(aHealth))
   pygame.display.set_caption(text)
+
+def drawRangeCircles(vehicle):
+  # Draw the hollow range circles around the vehicle
+  pygame.draw.circle(screen, (0, 255, 0), (int(vehicle.position.x), int(vehicle.position.y)), int(vehicle.dna[2]), 1)
+  pygame.draw.circle(screen, (255, 0, 0), (int(vehicle.position.x), int(vehicle.position.y)), int(vehicle.dna[3]), 1)
+  
+def DrawAttractionLines(vehicle):
+  pygame.draw.line(screen, (0, 255, 0), (int(vehicle.position.x), int(vehicle.position.y)), (int(vehicle.position.x + 40*vehicle.dna[0]), int(vehicle.position.y + 40*vehicle.dna[0])), 2)
+  pygame.draw.line(screen, (255, 0, 0), (int(vehicle.position.x), int(vehicle.position.y)), (int(vehicle.position.x - 40*vehicle.dna[1]), int(vehicle.position.y - 40*vehicle.dna[1])), 2)
+def showtext(screen,text,location,fontsize):
+    font = pygame.font.SysFont("Copperplate gothic", fontsize, True, False)
+    textObject = font.render(text, 0, pygame.Color('White'))
+    location1 = pygame.Rect(location, location)
+    # textLocation = p.Rect(0, 0, screen_width, screen_height).move(screen_width / 2 - textObject.get_width() / 2, screen_height / 2 - textObject.get_height() / 2)
+    # white = p.Color("black")
+    # screen.blit(white,p.rect(textLocation,textLocation,200,200))
+    screen.blit(textObject, location1)
 
 
 
@@ -317,19 +387,19 @@ poison = []
 debug = False
 
 # Create the vehicles
-for i in range(40):
+for i in range(50):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   vehicles.append(Vehicle(x, y))
 
 # Create the food particles
-for i in range(40):
+for i in range(100):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   food.append(pygame.math.Vector2(x, y))
 
 # Create the poison particles
-for i in range(40):
+for i in range(100):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   poison.append(pygame.math.Vector2(x, y))
@@ -358,22 +428,24 @@ while running:
   # Draw the food and poison particles
   drawFood()
   drawPoison()
-  showText()
-
+  appearText()
+  if debug:
+    for v in vehicles:
+      drawRangeCircles(v)
+      DrawAttractionLines(v)
 
   # Draw the vehicles
   drawVehicles()
-
+  # for v in vehicles:
+  #   drawRangeCircles(v)
+  #   DrawAttractionLines(v)
   # Update the display
   pygame.display.flip()
 
   # Set the frame rate
   clock.tick(30)
   # importing the required module 
-import matplotlib.pyplot as plt 
-
 import matplotlib.pyplot as plt
-
 # Define the x-axis values
 x = range(len(aHealth))
 
@@ -389,63 +461,62 @@ plt.title('Average Health per Generation')
 plt.show()
 # Quit Pygame
 pygame.quit()
-def nextGeneration():
-  """
-  Creates the next generation of vehicles.
-  """
-  global vehicles
+# def nextGeneration():
+  # """
+  # Creates the next generation of vehicles.
+  # """
+  # global vehicles
 
-  # Create a new list of vehicles for the next generation
-  newVehicles = []
+  # # Create a new list of vehicles for the next generation
+  # newVehicles = []
 
-  # Calculate the total health of all vehicles in the current generation
-  totalHealth = 0
-  for v in vehicles:
-    totalHealth += v.health
+  # # Calculate the total health of all vehicles in the current generation
+  # totalHealth = 0
+  # for v in vehicles:
+  #   totalHealth += v.health
 
-  # For each vehicle in the current generation
-  for i in range(len(vehicles)):
-    # Calculate the fitness of the vehicle as its health divided by the total health of all vehicles
-    fitness = vehicles[i].health / totalHealth
+  # # For each vehicle in the current generation
+  # for i in range(len(vehicles)):
+  #   # Calculate the fitness of the vehicle as its health divided by the total health of all vehicles
+  #   fitness = vehicles[i].health / totalHealth
 
-    # Select two parent vehicles based on their fitness
-    parentA = pickParent(vehicles, fitness)
-    parentB = pickParent(vehicles, fitness)
+  #   # Select two parent vehicles based on their fitness
+  #   parentA = pickParent(vehicles, fitness)
+  #   parentB = pickParent(vehicles, fitness)
 
-    # Create a new vehicle by crossing over the DNA of the two parent vehicles
-    child = parentA.crossover(parentB)
+  #   # Create a new vehicle by crossing over the DNA of the two parent vehicles
+  #   child = parentA.crossover(parentB)
 
-    # Mutate the DNA of the new vehicle
-    child.mutate()
+   
 
-    # Add the new vehicle to the list of vehicles for the next generation
-    newVehicles.append(child)
+  #   # Add the new vehicle to the list of vehicles for the next generation
+  #   newVehicles.append(child)
 
-  # Replace the current generation with the list of vehicles for the next generation
-  vehicles = newVehicles
+  # # Replace the current generation with the list of vehicles for the next generation
+  # vehicles = newVehicles
 
-def pickParent(vehicles, fitness):
-  """
-  Picks a parent vehicle based on its fitness.
+# def pickParent(vehicles, fitness):
+#   """
+#   Picks a parent vehicle based on its fitness.
 
-  Args:
-  vehicles (list): The list of vehicles to choose from.
-  fitness (float): The fitness of the vehicles.
+#   Args:
+#   vehicles (list): The list of vehicles to choose from.
+#   fitness (float): The fitness of the vehicles.
 
-  Returns:
-  Vehicle: The parent vehicle.
-  """
-  # Pick a random number between 0 and 1
-  r = random.uniform(0, 1)
+#   Returns:
+#   Vehicle: The parent vehicle.
+#   """
+#   # Pick a random number between 0 and 1
+#   r = random.uniform(0, 1)
 
-  # Loop through the vehicles and calculate the cumulative fitness
-  cumulativeFitness = 0
-  for v in vehicles:
-    cumulativeFitness += v.health / fitness
+#   # Loop through the vehicles and calculate the cumulative fitness
+#   cumulativeFitness = 0
+#   for v in vehicles:
+#     cumulativeFitness += v.health / fitness
 
-    # If the cumulative fitness is greater than the random number, return the vehicle
-    if cumulativeFitness > r:
-      return v
+#     # If the cumulative fitness is greater than the random number, return the vehicle
+#     if cumulativeFitness > r:
+#       return v
 
-  # If no vehicle was selected, return the last vehicle in the list
-  return vehicles[-1]
+#   # If no vehicle was selected, return the last vehicle in the list
+#   return vehicles[-1]
