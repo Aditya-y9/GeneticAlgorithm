@@ -19,7 +19,7 @@ clock = pygame.time.Clock()
 
 # Set the screen size
 screen = pygame.display.set_mode((screen_height, screen_width))
-
+pygame.display.set_icon(pygame.image.load(r'C:\Users\MSHOME\Desktop\Newfolder\GeneticAlgorithm\p5\coc_logo.jpg'))
 # Set the debug flag
 debug = False
 generation = 0
@@ -305,14 +305,14 @@ def drawVector(position, vector, color):
 
 def addFood():
   # Add a food particle with a small probability
-  if random.random() < 0.38:
+  if random.random() < 0.4:
     x = random.randint(0, screen_width)
     y = random.randint(0, screen_height)
     food.append(pygame.math.Vector2(x, y))
 
 def addPoison():
   # Add a poison particle with a small probability
-  if random.random() < 0.38:
+  if random.random() < 0.4:
     x = random.randint(0, screen_width)
     y = random.randint(0, screen_height)
     poison.append(pygame.math.Vector2(x, y))
@@ -358,7 +358,7 @@ def averageHealth(aHealth):
 
 def appearText():
   # Display the text on the screen
-  text = "Average Health: " + str(averageHealth(aHealth))
+  text = "Average Health: " + str(100*averageHealth(aHealth))
   pygame.display.set_caption(text)
 
 def drawRangeCircles(vehicle):
@@ -387,7 +387,7 @@ poison = []
 debug = False
 
 # Create the vehicles
-for i in range(40):
+for i in range(50):
   x = random.randint(0, screen_width)
   y = random.randint(0, screen_height)
   vehicles.append(Vehicle(x, y))
