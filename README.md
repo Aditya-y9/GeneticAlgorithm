@@ -1,5 +1,6 @@
 # Vehicle Simulation
-![Alt text](/coc_logo.jpg?raw=true "Title")
+![coc_logo](https://github.com/Aditya-y9/GeneticAlgorithm/assets/122613756/915e2bab-d17b-4fc2-9906-cad83ef72928)
+
 ### <strong style="align-text:center">
 Under Guidance of College Coding Club CoC.
 <strong>
@@ -8,7 +9,7 @@ This is a Python simulation of vehicles that eat food and avoid poison particles
 The simulation is built using the Pygame library, which is a set of Python modules designed for writing video games. 
 The simulation is displayed on a screen with a width of 1080 pixels and a height of 720 pixels. 
 
-![Alt text](/ui.png?raw=true "Title")
+![ui](https://github.com/Aditya-y9/GeneticAlgorithm/assets/122613756/3683e61a-34f7-45f5-92d1-dfe428a4079d)
 ### <strong style="font-family:courier new">
 Basic interface
 <strong>
@@ -16,7 +17,8 @@ The simulation includes vehicles, food particles, and poison particles.
 The vehicles are controlled by a set of rules that determine their behavior, such as seeking out food particles and avoiding poison particles.
 
 
-![Alt text](/debug.png?raw=true "Title")
+![debug](https://github.com/Aditya-y9/GeneticAlgorithm/assets/122613756/ef7c3305-f426-4fac-abe2-2c8dec864728)
+
 ### <strong style="font-family:copperplate gothic">
 Vehicle with debug mode on
 <strong>
@@ -35,7 +37,8 @@ It works by creating a new population of vehicles based on the fitness of the pr
 The fitness of each vehicle is determined by the amount of food it eats and the amount of poison it avoids.
 The vehicles with the highest fitness are more likely to be selected for reproduction.
 
-![Alt text](/generations.png?raw=true "Title")
+![generations](https://github.com/Aditya-y9/GeneticAlgorithm/assets/122613756/3c1bcc9e-29e2-416d-9399-4dd682a1aa07)
+
 ### <strong style="font-style:italic">
 Generations of vehicles
 <strong>
@@ -44,7 +47,8 @@ The vehicles with the highest fitness are more likely to pass on their genes to 
 The vehicles with the lowest fitness are less likely to pass on their genes to the next generation.
 The vehicles with the highest fitness are more likely to have their genes mutated.
 
-![Alt text](/graph.png?raw=true "Title")
+![graph](https://github.com/Aditya-y9/GeneticAlgorithm/assets/122613756/d170835a-2eb6-4db9-90a1-cf5db6521f35)
+
 ### <strong style="font-family:courier new">
 Graph showing average health of vehicles over generations
 Graph made using Matplotlib
@@ -66,10 +70,6 @@ To run the simulation, simply run the `main.py` file using Python. The simulatio
 2. Install Pygame by running the following command in the terminal: `pip install pygame`
 3. Download the `main.py` file from this repository
 4. Run the `main.py` file using Python
-
-## License
-
-This code is licensed under the MIT License. See the `LICENSE` file for more information.
 
 ## Pygame Library
 
