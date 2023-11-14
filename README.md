@@ -1,5 +1,5 @@
 # Vehicle Simulation
-![coc_logo](https://github.com/Aditya-y9/GeneticAlgorithm/assets/122613756/915e2bab-d17b-4fc2-9906-cad83ef72928)
+![coclogo](https://github.com/Aditya-y9/GeneticAlgorithm/assets/122613756/915e2bab-d17b-4fc2-9906-cad83ef72928)
 
 ### <strong style="align-text:center">
 Under Guidance of College Coding Club CoC.
