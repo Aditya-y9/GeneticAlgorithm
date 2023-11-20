@@ -19,7 +19,7 @@ clock = pygame.time.Clock()
 
 # Set the screen size
 screen = pygame.display.set_mode((screen_height, screen_width))
-pygame.display.set_icon(pygame.image.load(r'C:\Users\MSHOME\Desktop\Newfolder\GeneticAlgorithm\p5\coc_logo.jpg'))
+pygame.display.set_icon(pygame.image.load(r'C:\Users\MSHOME\Desktop\Newfolder\GeneticAlgorithm\coc_logo.jpg'))
 # Set the debug flag
 debug = False
 generation = 0
