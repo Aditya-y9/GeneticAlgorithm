@@ -19,7 +19,7 @@ clock = pygame.time.Clock()
 
 # Set the screen size
 screen = pygame.display.set_mode((screen_height, screen_width))
-pygame.display.set_icon(pygame.image.load(r'C:\Users\MSHOME\Desktop\Newfolder\GeneticAlgorithm\coc_logo.jpg'))
+# pygame.display.set_icon(pygame.image.load(r'C:\Users\MSHOME\Desktop\Newfolder\GeneticAlgorithm\p5\coc_logo.jpg'))
 # Set the debug flag
 debug = False
 generation = 0
@@ -299,10 +299,6 @@ def drawVector(position, vector, color):
   # Draw a line representing the vector
   pygame.draw.line(screen, color, (int(position.x), int(position.y)), (int(position.x + vector.x), int(position.y + vector.y)), 1)
 
-def drawVector(position, vector, color):
-  # Draw a vector on the screen
-  pygame.draw.line(screen, color, (position.x, position.y), (position.x + vector.x, position.y + vector.y), 1)
-
 def addFood():
   # Add a food particle with a small probability
   if random.random() < 0.4:
@@ -405,8 +401,15 @@ for i in range(100):
   poison.append(pygame.math.Vector2(x, y))
 
 # Start the game loop
+
+# start = time.time()
+
 running = True
+
 while running:
+  # if time.time() - start > 30:
+  #   running = False
+  #   break
   # Handle events
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
