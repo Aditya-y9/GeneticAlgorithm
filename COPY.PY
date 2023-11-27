@@ -1,37 +1,17 @@
 
- # Import the necessary libraries
-
-# for ui
-import pygame
-
-# for dna
-import random
-
-# for math
-import math
-
-# for analysis
-import matplotlib.pyplot as plt 
-
-# for time
-import time
-# Initialize Pygame module functions
-pygame.init()
-
-
 # Set the screen size
 screen_width = 540
 screen_height = 540
 
 # Set the clock
-# clock is used to control the frame rate of the game
+
 clock = pygame.time.Clock()
 
-# set the screen
+# Set the screen size
 screen = pygame.display.set_mode((screen_height, screen_width))
 
-# set the icon of the game
-pygame.display.set_icon(pygame.image.load("title1.png"))
+# Set the icon of the game
+
 
 # Set the debug flag
 debug = False
@@ -39,14 +19,14 @@ debug = False
 # Set the generation number initially to 0
 generation = 0
 
-
 # Define the Vehicle class
 class Vehicle:
+
 
   # constructor for the Vehicle class
   def __init__(self, x, y,dna=None):
 
-    # point to the global generation variable
+    # pointer to global var
     global generation
     """
     Initializes a new instance of the Vehicle class.
@@ -61,7 +41,7 @@ class Vehicle:
     self.position = pygame.math.Vector2(x, y)
     self.velocity = pygame.math.Vector2(0, -2)
 
-    # without any attraction or repulsion , the vehicle will move in a straight line, initially as the acceleration is 0
+    # without any attraction or repulsion , initial acceleration is 0
     self.acceleration = pygame.math.Vector2(0, 0)
 
     # radius of the vehicle
@@ -73,6 +53,7 @@ class Vehicle:
 
     # controversial, but we keep it initially to 0
     self.health = 0
+
     if dna != None:
       # aHealth.append(1)
       print("T")
@@ -90,7 +71,8 @@ class Vehicle:
       # ro to introduce probability of mutation
       ro = random.uniform(-0.1, 0.1)
 
-      #<----------------------------------------------------------------------------------------------->
+
+      # ----------------------------------------------------------------------------------------------------
       if -0.1 < ro < -0.075:
         self.dna = [dna[0], dna[1], dna[2] + random.uniform(-5,5), dna[3] + random.uniform(-5, 5)]
       elif -0.075 < ro < -0.05:
@@ -109,7 +91,7 @@ class Vehicle:
         self.dna = [dna[0], dna[1] + random.uniform(-0.1, 0.1), dna[2], dna[3]]
     else:
       self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
-# <----------------------------------------------------------------------------------------------->
+      # ----------------------------------------------------------------------------------------------------
       # if -0.1 < ro < -0.05:
       #   self.dna = [dna[0], dna[1], dna[2], dna[3] + random.uniform(-5, 5)]
       # elif -0.05 < ro < 0:
@@ -158,10 +140,13 @@ class Vehicle:
     steerB = self.eat(bad, -0.75, self.dna[3])
 
     # Apply the DNA multipliers to the steering forces
+    # multipiers are attraction and repulsion
     steerG *= self.dna[0]
     steerB *= self.dna[1]
 
     # Apply the steering forces to the acceleration of the vehicle
+    # basically increasing the acceleration
+    # since F = ma
     self.applyForce(steerG)
     self.applyForce(steerB)
 
@@ -204,12 +189,13 @@ class Vehicle:
     Returns:
     Vector2: The steering force required to reach the closest particle.
     """
-    # Find the closest good or bad particle and eat it if it is within range
 
     # set to a very large number infinity
+    # record is the closest distance to a particle
     record = float("inf")
 
     # closest to none for now
+    # closest is the closest particle
     closest = None
 
     # loop through the list of particles backwards to remove them
@@ -248,9 +234,14 @@ class Vehicle:
     """
     # Seek a target and return the steering force required to reach it
     desired = target - self.position
+
+    # Normalize the desired vector
     desired.normalize()
+
+    # Scale the desired vector to the maximum speed
     desired *= self.maxspeed
 
+    # Calculate the steering force
     steer = desired - self.velocity
     if steer.length() >= self.maxforce:
       steer.scale_to_length(self.maxforce)
@@ -334,15 +325,13 @@ def drawVector(position, vector, color):
   # Draw a line representing the vector
   pygame.draw.line(screen, color, (int(position.x), int(position.y)), (int(position.x + vector.x), int(position.y + vector.y)), 1)
 
-def drawVector(position, vector, color):
-  # Draw a vector on the screen
-  pygame.draw.line(screen, color, (position.x, position.y), (position.x + vector.x, position.y + vector.y), 1)
-
 def addFood():
   # Add a food particle with a small probability
   if random.random() < 0.4:
+    # random position limited to the screen size
     x = random.randint(0, screen_width)
     y = random.randint(0, screen_height)
+    # add the food particle to the list of food particles
     food.append(pygame.math.Vector2(x, y))
 
 def addPoison():
@@ -353,17 +342,18 @@ def addPoison():
     poison.append(pygame.math.Vector2(x, y))
 
 def drawFood():
-  # Draw the food particles on the screen
+  # food is list of (x,y) tuples of food particles
   for f in food:
+    # draw a circle on the screen on food x and y coordinates
     pygame.draw.circle(screen, (0, 255, 0), (int(f.x), int(f.y)), 4)
 
 def drawPoison():
-  # Draw the poison particles on the screen
+  # same as food
   for p in poison:
     pygame.draw.circle(screen, (255, 0, 0), (int(p.x), int(p.y)), 4)
 
 def drawVehicles():
-  # Draw the vehicles on the screen
+  # vehicles is a list of objects of class Vehicle
   for v in vehicles:
     # v.boundaries()
     v.behaviors(food, poison)
@@ -386,9 +376,9 @@ def averageHealth(aHealth):
   total = 0
   for v in vehicles:
     total += v.health
-    average_Health = total / len(vehicles)
+  average_Health = total / len(vehicles)
     # print(v.health)
-    aHealth.append(average_Health)
+  aHealth.append(average_Health)
   return average_Health
 
 def appearText():
@@ -398,19 +388,31 @@ def appearText():
 
 def drawRangeCircles(vehicle):
   # Draw the hollow range circles around the vehicle
+
+  # surface, pos(x,y), radius, width
   pygame.draw.circle(screen, (0, 255, 0), (int(vehicle.position.x), int(vehicle.position.y)), int(vehicle.dna[2]), 1)
   pygame.draw.circle(screen, (255, 0, 0), (int(vehicle.position.x), int(vehicle.position.y)), int(vehicle.dna[3]), 1)
   
 def DrawAttractionLines(vehicle):
+
+  # surface , color, start pos, end pos, width
   pygame.draw.line(screen, (0, 255, 0), (int(vehicle.position.x), int(vehicle.position.y)), (int(vehicle.position.x + 40*vehicle.dna[0]), int(vehicle.position.y + 40*vehicle.dna[0])), 2)
+  
   pygame.draw.line(screen, (255, 0, 0), (int(vehicle.position.x), int(vehicle.position.y)), (int(vehicle.position.x - 40*vehicle.dna[1]), int(vehicle.position.y - 40*vehicle.dna[1])), 2)
+
+
 def showtext(screen,text,location,fontsize):
+    
+    # set the font of the text
     font = pygame.font.SysFont("Copperplate gothic", fontsize, True, False)
+
+    # render text
     textObject = font.render(text, 0, pygame.Color('White'))
+
+    # blit at?
     location1 = pygame.Rect(location, location)
-    # textLocation = p.Rect(0, 0, screen_width, screen_height).move(screen_width / 2 - textObject.get_width() / 2, screen_height / 2 - textObject.get_height() / 2)
-    # white = p.Color("black")
-    # screen.blit(white,p.rect(textLocation,textLocation,200,200))
+    
+    # blit the text
     screen.blit(textObject, location1)
 
 
@@ -432,7 +434,7 @@ for i in range(50):
   y = random.randint(0, screen_height)
 
   # add the vehicle to the list of vehicles
-  # call object of the class Vehicle by calling the constructor
+  # call object of class Vehicle by calling the constructor
   vehicles.append(Vehicle(x, y))
 
 # same as above
@@ -447,21 +449,29 @@ for i in range(100):
   y = random.randint(0, screen_height)
   poison.append(pygame.math.Vector2(x, y))
 
+
+
 # Start the game loop
+# start = time.time()
 running = True
-
+# ------------------------START OF GAME LOOP---------------------------------------------------------------
 while running:
-
+  # if time.time() - start > 30:
+  #   running = False
+  #   break
+  # Handle events
   for event in pygame.event.get():
     if event.type == pygame.QUIT:
-      # break at QUIT
+      # BREAK AT QUIT
       running = False
     elif event.type == pygame.KEYDOWN:
+      # debug mode on pressing d
       if event.key == pygame.K_d:
-        # debug mode on pressing D
         debug = not debug
+  # make new vehicle at mouse position
     elif event.type == pygame.MOUSEBUTTONDOWN:
       x, y = pygame.mouse.get_pos()
+      # constructor
       vehicles.append(Vehicle(x, y))
 
   # Clear the screen initially
@@ -469,7 +479,7 @@ while running:
 
   # Add food and poison particles on the screen
   # our gameloop always running functions
-  # so we introduce probability of adding food and poison particles
+  # so we introduce probability of adding food and poison
   addFood()
   addPoison()
 
@@ -477,12 +487,13 @@ while running:
   drawFood()
   drawPoison()
 
-  # calculate the average health of the vehicles
-  # set the caption of the window
+  # Calculate the average health of the vehicles
+  # se the scrren caption
   appearText()
 
+  # Draw the debug information if the debug flag is set
   if debug:
-    # vehicles is a list of objects of the class Vehicle
+    # vehicles is a list of objects of class Vehicle
     for v in vehicles:
       # draw the debug information
       drawRangeCircles(v)
@@ -494,26 +505,40 @@ while running:
   # Update the display
   pygame.display.flip()
 
-
   # Set the frame rate
   clock.tick(30)
 
 
+# ------------------------END OF GAME LOOP---------------------------------------------------------------
+
+
+# <-----------------------------START OF GRAPH----------------------------------------------------------->
 # Define the x-axis values
 x = range(len(aHealth))
 
+
+
 # Plot the graph
 plt.plot(x, aHealth)
+
+
 
 # Add labels and title
 plt.xlabel('Generation')
 plt.ylabel('Average Health')
 plt.title('Average Health per Generation')
 
+
 # Show the graph
 plt.show()
+
+
 # Quit Pygame
 pygame.quit()
+
+
+
+# <-----------------------------END OF GRAPH----------------------------------------------------------->
 # def nextGeneration():
   # """
   # Creates the next generation of vehicles.
