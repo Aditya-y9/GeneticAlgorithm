@@ -338,15 +338,15 @@ def drawVector(position, vector, color):
 def addFood():
   # Add a food particle with a small probability
   if random.random() < 0.4:
-    x = random.randint(0, screen_width)
-    y = random.randint(0, screen_height)
+    x = random.randint(0, screen_width/2)
+    y = random.randint(0, screen_height/2)
     food.append(pygame.math.Vector2(x, y))
 
 def addPoison():
   # Add a poison particle with a small probability
   if random.random() < 0.4:
-    x = random.randint(0, screen_width)
-    y = random.randint(0, screen_height)
+    x = random.randint(screen_width/2, screen_width)
+    y = random.randint(screen_height/2, screen_height)
     poison.append(pygame.math.Vector2(x, y))
 
 def drawFood():
