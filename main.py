@@ -334,9 +334,6 @@ def drawVector(position, vector, color):
   # Draw a line representing the vector
   pygame.draw.line(screen, color, (int(position.x), int(position.y)), (int(position.x + vector.x), int(position.y + vector.y)), 1)
 
-def drawVector(position, vector, color):
-  # Draw a vector on the screen
-  pygame.draw.line(screen, color, (position.x, position.y), (position.x + vector.x, position.y + vector.y), 1)
 
 def addFood():
   # Add a food particle with a small probability
