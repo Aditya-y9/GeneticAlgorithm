@@ -1,5 +1,43 @@
 # Vehicle Simulation
 
+
+## How to run the simulation
+
+
+### Prerequisites
+
+Before running the code, make sure you have the following dependencies installed:
+
+- [Python](https://www.python.org/) (version 3.x)
+- [pygame](https://www.pygame.org/) (version 2.1.1)
+- [matplotlib](https://matplotlib.org/) (version 3.4.3)
+
+Install the dependencies using the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Clone the repository:
+
+```bash
+git clone https://github.com/Aditya-y9/GeneticAlgorithm.git
+cd genetic-algorithm-simulation
+```
+
+### Run the simulation:
+
+```bash
+python main.py
+```
+
+Controls:
+
+Press D to toggle debug mode.
+Press P to pause/unpause the simulation.
+Enjoy the simulation! Watch as vehicles evolve to navigate the environment.
+
+
 #### Project to demonstrate Theoretical and Practical Understanding of Genetic Algorithm for ProjectX
 <p align="center">
 <img src="https://github.com/Aditya-y9/GeneticAlgorithm/assets/122613756/915e2bab-d17b-4fc2-9906-cad83ef72928"

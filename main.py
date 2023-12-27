@@ -1,5 +1,5 @@
 
- # Import the necessary libraries
+# Import the necessary libraries
 
 # for ui
 import pygame
@@ -11,13 +11,14 @@ import random
 import math
 
 # for analysis
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 
 # for time
 import time
+
+
 # Initialize Pygame module functions
 pygame.init()
-
 
 # Set the screen size
 screen_width = 540
@@ -31,7 +32,7 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((screen_height, screen_width))
 
 # set the icon of the game
-pygame.display.set_icon(pygame.image.load("title1.png"))
+# pygame.display.set_icon(pygame.image.load("title1.png"))
 
 # Set the debug flag
 debug = False
@@ -44,7 +45,7 @@ generation = 0
 class Vehicle:
 
   # constructor for the Vehicle class
-  def __init__(self, x, y,dna=None):
+  def __init__(self, x, y, dna=None):
 
     # point to the global generation variable
     global generation
@@ -73,6 +74,10 @@ class Vehicle:
 
     # controversial, but we keep it initially to 0
     self.health = 0
+
+
+    # if DNA already exists, then mutate it
+    # it means that the vehicle is a child of another vehicle
     if dna != None:
       # aHealth.append(1)
       print("T")
@@ -84,31 +89,48 @@ class Vehicle:
       #   pygame.display.update()
       #   time.sleep(2)
       #   show = False
-      
+
       # randomized DNA closely related to the parent to mtuation
 
       # ro to introduce probability of mutation
       ro = random.uniform(-0.1, 0.1)
 
-      #<----------------------------------------------------------------------------------------------->
+      # <----------------------------------------------------------------------------------------------->
+
+      # if DNA already exists, then mutate it
+      # which DNA to mutate is decided by the random number ro
+      # any 2 of the 4 DNA can be mutated
+      # we mutates the DNA by adding a random number between -0.1 and 0.1 to the DNA
+      # it can either be positive or negative
+      # so the DNA can either increase or decrease
+      # so we find the correct direction of mutation to generate better vehicles
+      # this is the crux of reinforcement learning
       if -0.1 < ro < -0.075:
-        self.dna = [dna[0], dna[1], dna[2] + random.uniform(-5,5), dna[3] + random.uniform(-5, 5)]
+        self.dna = [dna[0], dna[1], dna[2] +
+                    random.uniform(-5, 5), dna[3] + random.uniform(-5, 5)]
       elif -0.075 < ro < -0.05:
-        self.dna = [dna[0], dna[1] - random.uniform(-0.1, 0.1), dna[2], dna[3] - random.uniform(-5, 5)]
+        self.dna = [dna[0], dna[1] -
+                    random.uniform(-0.1, 0.1), dna[2], dna[3] - random.uniform(-5, 5)]
       elif -0.05 < ro < -0.025:
-        self.dna = [dna[0], dna[1] - random.uniform(-0.1, 0.1), dna[2] - random.uniform(-5, 5), dna[3]]
+        self.dna = [dna[0], dna[1] -
+                    random.uniform(-0.1, 0.1), dna[2] - random.uniform(-5, 5), dna[3]]
       elif -0.025 < ro < 0:
-        self.dna = [dna[0] + random.uniform(-0.1,0.1), dna[1], dna[2] - random.uniform(-5, 5), dna[3] - random.uniform(-5, 5)]
+        self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2] -
+                    random.uniform(-5, 5), dna[3] - random.uniform(-5, 5)]
       elif 0 < ro < 0.025:
-        self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2], dna[3] + random.uniform(-5, 5)]
+        self.dna = [
+            dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2], dna[3] + random.uniform(-5, 5)]
       elif 0.025 < ro < 0.05:
-        self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2] - random.uniform(-5, 5), dna[3]] 
+        self.dna = [
+            dna[0] + random.uniform(-0.1, 0.1), dna[1], dna[2] - random.uniform(-5, 5), dna[3]]
       elif 0.05 < ro < 0.075:
-        self.dna = [dna[0] + random.uniform(-0.1, 0.1), dna[1] + random.uniform(-0.1, 0.1), dna[2], dna[3]]
+        self.dna = [
+            dna[0] + random.uniform(-0.1, 0.1), dna[1] + random.uniform(-0.1, 0.1), dna[2], dna[3]]
       else:
         self.dna = [dna[0], dna[1] + random.uniform(-0.1, 0.1), dna[2], dna[3]]
     else:
-      self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
+      self.dna = [random.uniform(-2, 2), random.uniform(-2, 2),
+                  random.uniform(0, 150), random.uniform(0, 150)]
 # <----------------------------------------------------------------------------------------------->
       # if -0.1 < ro < -0.05:
       #   self.dna = [dna[0], dna[1], dna[2], dna[3] + random.uniform(-5, 5)]
@@ -120,7 +142,8 @@ class Vehicle:
       #   self.dna = [dna[0], dna[1], dna[2] + random.uniform(-5, 5), dna[3]]
     # else:
     #   self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
-    
+# <---------------------------------------------------------------------------------------------------->
+
 
   def update(self):
     """
@@ -129,10 +152,14 @@ class Vehicle:
     # Update the health, velocity, position, and acceleration of the vehicle
     # self.health -= 0.003
     self.velocity += self.acceleration
+
     # Limit the velocity to the maximum speed
     if self.velocity.length() > self.maxspeed:
       self.velocity.scale_to_length(self.maxspeed)
+
     self.position += self.velocity
+
+    # reset the acceleration so that it does not keep on increasing forever becuase its not velocity
     self.acceleration *= 0
 
   def applyForce(self, force):
@@ -168,23 +195,26 @@ class Vehicle:
   def clone(self):
     """
     Clones the vehicle with a small probability.
-
+    Cloning depends on the health of the vehicle.
+    Higher the health, higher the probability of cloning.
+    Also itis controlled by the random number generated.
+    But the probability of cloning is higher for higher health.
     Returns:
     Vehicle: A new instance of the Vehicle class with the same position as the original vehicle.
     """
     # Clone the vehicle with a small probability
     if random.random() < 0.005 and self.health >= 1.6:
-      return Vehicle(self.position.x, self.position.y,self.dna)
+      return Vehicle(self.position.x, self.position.y, self.dna)
     elif 0.1 < random.random() <= 0.004 and self.health >= 1.5:
-      return Vehicle(self.position.x, self.position.y,self.dna)
+      return Vehicle(self.position.x, self.position.y, self.dna)
     elif 0.01 < random.random() < 0.003 and self.health >= 1.4:
-      return Vehicle(self.position.x, self.position.y,self.dna)
+      return Vehicle(self.position.x, self.position.y, self.dna)
     elif 0.005 < random.random() < 0.002 and self.health >= 1.3:
-      return Vehicle(self.position.x, self.position.y,self.dna)
+      return Vehicle(self.position.x, self.position.y, self.dna)
     elif random.random() < 0.001 and self.health >= 1.2:
-      return Vehicle(self.position.x, self.position.y,self.dna)
+      return Vehicle(self.position.x, self.position.y, self.dna)
     elif random.random() < 0.0001 and self.health >= 1.1:
-      return Vehicle(self.position.x, self.position.y,self.dna)
+      return Vehicle(self.position.x, self.position.y, self.dna)
     # elif 0.005 < random.random() < 0.003 and self.health > 1:
     #   return Vehicle(self.position.x, self.position.y,self.dna)
     # elif random.random() < 0.001 and self.health > 0.75:
@@ -223,11 +253,10 @@ class Vehicle:
         lst.pop(i)
         self.health += nutrition
       else:
-        # perception for particular particle according to DNA and evolution 
+        # perception for particular particle according to DNA and evolution
         if d < record and d < perception:
           record = d
           closest = lst[i]
-
 
     # if there is a closest particle
     # seek it
@@ -276,9 +305,11 @@ class Vehicle:
 
     # Draw the vehicle on the screen
     try:
-      pygame.draw.circle(screen, (255-255*self.health, 255), 255, 0), (int(self.position.x), int(self.position.y)), self.r
+      pygame.draw.circle(screen, (255-255*self.health, 255), 255,
+                         0), (int(self.position.x), int(self.position.y)), self.r
     except:
-      pygame.draw.circle(screen, (255, 255, 0), (int(self.position.x), int(self.position.y)), self.r)
+      pygame.draw.circle(screen, (255, 255, 0), (int(
+          self.position.x), int(self.position.y)), self.r)
 
     # Draw the vehicle's debug information if the debug flag is set
   # def drawDebug(self, angle):
@@ -322,6 +353,7 @@ class Vehicle:
   #   pygame.draw.circle(screen, (0, 255, 0), (int(self.position.x), int(self.position.y)), int(self.dna[2] * self.dna[0]))
   #   pygame.draw.circle(screen, (255, 0, 0), (int(self.position.x), int(self.position.y)), int(self.dna[3] * self.dna[1]))
 
+
 def drawVector(position, vector, color):
   """
   Draws a vector on the screen.
@@ -332,7 +364,8 @@ def drawVector(position, vector, color):
   color (tuple): The color of the vector.
   """
   # Draw a line representing the vector
-  pygame.draw.line(screen, color, (int(position.x), int(position.y)), (int(position.x + vector.x), int(position.y + vector.y)), 1)
+  pygame.draw.line(screen, color, (int(position.x), int(position.y)), (int(
+      position.x + vector.x), int(position.y + vector.y)), 1)
 
 
 def addFood():
@@ -342,6 +375,7 @@ def addFood():
     y = random.randint(0, screen_height)
     food.append(pygame.math.Vector2(x, y))
 
+
 def addPoison():
   # Add a poison particle with a small probability
   if random.random() < 0.4:
@@ -349,15 +383,18 @@ def addPoison():
     y = random.randint(0, screen_height)
     poison.append(pygame.math.Vector2(x, y))
 
+
 def drawFood():
   # Draw the food particles on the screen
   for f in food:
     pygame.draw.circle(screen, (0, 255, 0), (int(f.x), int(f.y)), 4)
 
+
 def drawPoison():
   # Draw the poison particles on the screen
   for p in poison:
     pygame.draw.circle(screen, (255, 0, 0), (int(p.x), int(p.y)), 4)
+
 
 def drawVehicles():
   # Draw the vehicles on the screen
@@ -377,7 +414,10 @@ def drawVehicles():
       food.append(pygame.math.Vector2(x, y))
       vehicles.remove(v)
 
+
 aHealth = []
+
+
 def averageHealth(aHealth):
   # Calculate the average health of the vehicles
   total = 0
@@ -388,20 +428,29 @@ def averageHealth(aHealth):
     aHealth.append(average_Health)
   return average_Health
 
+
 def appearText():
   # Display the text on the screen
   text = "Average Health: " + str(100*averageHealth(aHealth))
   pygame.display.set_caption(text)
 
+
 def drawRangeCircles(vehicle):
   # Draw the hollow range circles around the vehicle
-  pygame.draw.circle(screen, (0, 255, 0), (int(vehicle.position.x), int(vehicle.position.y)), int(vehicle.dna[2]), 1)
-  pygame.draw.circle(screen, (255, 0, 0), (int(vehicle.position.x), int(vehicle.position.y)), int(vehicle.dna[3]), 1)
-  
+  pygame.draw.circle(screen, (0, 255, 0), (int(vehicle.position.x), int(
+      vehicle.position.y)), int(vehicle.dna[2]), 1)
+  pygame.draw.circle(screen, (255, 0, 0), (int(vehicle.position.x), int(
+      vehicle.position.y)), int(vehicle.dna[3]), 1)
+
+
 def DrawAttractionLines(vehicle):
-  pygame.draw.line(screen, (0, 255, 0), (int(vehicle.position.x), int(vehicle.position.y)), (int(vehicle.position.x + 40*vehicle.dna[0]), int(vehicle.position.y + 40*vehicle.dna[0])), 2)
-  pygame.draw.line(screen, (255, 0, 0), (int(vehicle.position.x), int(vehicle.position.y)), (int(vehicle.position.x - 40*vehicle.dna[1]), int(vehicle.position.y - 40*vehicle.dna[1])), 2)
-def showtext(screen,text,location,fontsize):
+  pygame.draw.line(screen, (0, 255, 0), (int(vehicle.position.x), int(vehicle.position.y)), (int(
+      vehicle.position.x + 40*vehicle.dna[0]), int(vehicle.position.y + 40*vehicle.dna[0])), 2)
+  pygame.draw.line(screen, (255, 0, 0), (int(vehicle.position.x), int(vehicle.position.y)), (int(
+      vehicle.position.x - 40*vehicle.dna[1]), int(vehicle.position.y - 40*vehicle.dna[1])), 2)
+
+
+def showtext(screen, text, location, fontsize):
     font = pygame.font.SysFont("Copperplate gothic", fontsize, True, False)
     textObject = font.render(text, 0, pygame.Color('White'))
     location1 = pygame.Rect(location, location)
@@ -409,7 +458,6 @@ def showtext(screen,text,location,fontsize):
     # white = p.Color("black")
     # screen.blit(white,p.rect(textLocation,textLocation,200,200))
     screen.blit(textObject, location1)
-
 
 
 # Initialize the variables
@@ -469,8 +517,6 @@ while running:
 
   if Paused:
       continue
-  
-
 
   # Clear the screen initially
   screen.fill((0, 0, 0))
@@ -502,7 +548,6 @@ while running:
   # Update the display
   pygame.display.flip()
 
-
   # Set the frame rate
   clock.tick(30)
 
@@ -523,38 +568,36 @@ plt.show()
 # Quit Pygame
 pygame.quit()
 # def nextGeneration():
-  # """
-  # Creates the next generation of vehicles.
-  # """
-  # global vehicles
+# """
+# Creates the next generation of vehicles.
+# """
+# global vehicles
 
-  # # Create a new list of vehicles for the next generation
-  # newVehicles = []
+# # Create a new list of vehicles for the next generation
+# newVehicles = []
 
-  # # Calculate the total health of all vehicles in the current generation
-  # totalHealth = 0
-  # for v in vehicles:
-  #   totalHealth += v.health
+# # Calculate the total health of all vehicles in the current generation
+# totalHealth = 0
+# for v in vehicles:
+#   totalHealth += v.health
 
-  # # For each vehicle in the current generation
-  # for i in range(len(vehicles)):
-  #   # Calculate the fitness of the vehicle as its health divided by the total health of all vehicles
-  #   fitness = vehicles[i].health / totalHealth
+# # For each vehicle in the current generation
+# for i in range(len(vehicles)):
+#   # Calculate the fitness of the vehicle as its health divided by the total health of all vehicles
+#   fitness = vehicles[i].health / totalHealth
 
-  #   # Select two parent vehicles based on their fitness
-  #   parentA = pickParent(vehicles, fitness)
-  #   parentB = pickParent(vehicles, fitness)
+#   # Select two parent vehicles based on their fitness
+#   parentA = pickParent(vehicles, fitness)
+#   parentB = pickParent(vehicles, fitness)
 
-  #   # Create a new vehicle by crossing over the DNA of the two parent vehicles
-  #   child = parentA.crossover(parentB)
+#   # Create a new vehicle by crossing over the DNA of the two parent vehicles
+#   child = parentA.crossover(parentB)
 
-   
+#   # Add the new vehicle to the list of vehicles for the next generation
+#   newVehicles.append(child)
 
-  #   # Add the new vehicle to the list of vehicles for the next generation
-  #   newVehicles.append(child)
-
-  # # Replace the current generation with the list of vehicles for the next generation
-  # vehicles = newVehicles
+# # Replace the current generation with the list of vehicles for the next generation
+# vehicles = newVehicles
 
 # def pickParent(vehicles, fitness):
 #   """
