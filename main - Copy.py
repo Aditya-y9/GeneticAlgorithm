@@ -237,12 +237,9 @@ class Vehicle:
     # Find the closest good or bad particle and eat it if it is within range
 
     # set to a very large number infinity
-    # record is the distance to the closest particle
     record = float("inf")
 
     # closest to none for now
-
-    # closest is the closest particle
     closest = None
 
     # loop through the list of particles backwards to remove them
@@ -258,9 +255,7 @@ class Vehicle:
       else:
         # perception for particular particle according to DNA and evolution
         if d < record and d < perception:
-          # update the record and closest particle
           record = d
-          # now this is the closest particle
           closest = lst[i]
 
     # if there is a closest particle
@@ -281,20 +276,11 @@ class Vehicle:
     Vector2: The steering force required to reach the target.
     """
     # Seek a target and return the steering force required to reach it
-    # vector pointing from the position to the target
     desired = target - self.position
-
-    # normalize the vector
-    # vector scaled (0,1)
     desired.normalize()
-
-    # scale the vector to the maximum speed
-    # vector scaled (0,maxspeed)
     desired *= self.maxspeed
 
     steer = desired - self.velocity
-  
-
     if steer.length() >= self.maxforce:
       steer.scale_to_length(self.maxforce)
 
