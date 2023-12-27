@@ -338,15 +338,15 @@ def drawVector(position, vector, color):
 def addFood():
   # Add a food particle with a small probability
   if random.random() < 0.4:
-    x = random.randint(0, screen_width/2)
-    y = random.randint(0, screen_height/2)
+    x = random.randint(0, screen_width)
+    y = random.randint(0, screen_height)
     food.append(pygame.math.Vector2(x, y))
 
 def addPoison():
   # Add a poison particle with a small probability
   if random.random() < 0.4:
-    x = random.randint(screen_width/2, screen_width)
-    y = random.randint(screen_height/2, screen_height)
+    x = random.randint(0, screen_width)
+    y = random.randint(0, screen_height)
     poison.append(pygame.math.Vector2(x, y))
 
 def drawFood():
@@ -447,6 +447,9 @@ for i in range(100):
 # Start the game loop
 running = True
 
+
+Paused = False
+
 while running:
 
   for event in pygame.event.get():
@@ -457,9 +460,17 @@ while running:
       if event.key == pygame.K_d:
         # debug mode on pressing D
         debug = not debug
+      if event.key == pygame.K_p:
+        Paused = not Paused
+
     elif event.type == pygame.MOUSEBUTTONDOWN:
       x, y = pygame.mouse.get_pos()
       vehicles.append(Vehicle(x, y))
+
+  if Paused:
+      continue
+  
+
 
   # Clear the screen initially
   screen.fill((0, 0, 0))
