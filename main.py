@@ -1,4 +1,3 @@
-
 # Import the necessary libraries
 
 # for ui
@@ -75,7 +74,6 @@ class Vehicle:
     # controversial, but we keep it initially to 0
     self.health = 0
 
-
     # if DNA already exists, then mutate it
     # it means that the vehicle is a child of another vehicle
     if dna != None:
@@ -143,7 +141,6 @@ class Vehicle:
     # else:
     #   self.dna = [random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(0, 150), random.uniform(0, 150)]
 # <---------------------------------------------------------------------------------------------------->
-
 
   def update(self):
     """
@@ -293,7 +290,6 @@ class Vehicle:
     desired *= self.maxspeed
 
     steer = desired - self.velocity
-  
 
     if steer.length() >= self.maxforce:
       steer.scale_to_length(self.maxforce)
@@ -417,8 +413,6 @@ def drawVehicles():
     v.behaviors(food, poison)
     v.update()
     v.display()
-
-
 
     # mutate the vehicle with a small probability
     newVehicle = v.clone()
